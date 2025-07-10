@@ -22,9 +22,9 @@ class PostUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:users,email',
+            'password' => 'sometimes|required|min:6|confirmed',
         ];
     }
 }
