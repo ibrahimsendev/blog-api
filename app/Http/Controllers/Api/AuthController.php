@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -43,7 +44,7 @@ class AuthController extends Controller
 
     public function logout(): JsonResponse
     {
-        $this->authService->logout(auth()->user());
+        $this->authService->logout(Auth::user());
 
         return response()->json(['message' => 'Logged out']);
     }
