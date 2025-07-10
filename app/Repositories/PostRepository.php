@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class PostRepository implements PostRepositoryInterface
@@ -35,5 +36,24 @@ class PostRepository implements PostRepositoryInterface
         $post = $this->find($id);
         if (!$post) return false;
         return $post->delete();
+    }
+
+    public function search(array $filters): LengthAwarePaginator
+    {
+        $query = Post::query();
+
+        if (!empty($filters['search'])) {
+            $query->where('title', 'like', '%' . $filters['search'] . '%');
+        }
+
+        if (!empty($filters['category_id'])) {
+            $query->where('category_id', $filters['category_id']);
+        }
+
+        if (!empty($filters['author_id'])) {
+            $query->where('user_id', $filters['author_id']);
+        }
+
+        return $query->latest()->paginate(10);
     }
 }

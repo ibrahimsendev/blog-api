@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -14,8 +17,17 @@ class PostController extends Controller
 
     public function index(): JsonResponse
     {
-        $posts = $this->postService->getAllPosts();
-        return response()->json(PostResource::collection($posts));
+        $filters = request()->only(['search', 'category_id', 'author_id']);
+        $posts = $this->postService->searchPosts($filters);
+
+        return response()->json([
+            'data' => PostResource::collection($posts),
+            'meta' => [
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'total' => $posts->total(),
+            ],
+        ]);
     }
 
     public function show(int $id): JsonResponse
@@ -30,7 +42,7 @@ class PostController extends Controller
     public function store(PostStoreRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = Auth::id();
         $post = $this->postService->createPost($data);
         return response()->json(new PostResource($post), 201);
     }

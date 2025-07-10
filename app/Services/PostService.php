@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class PostService
@@ -38,5 +39,10 @@ class PostService
     public function deletePost(int $id): bool
     {
         return $this->postRepository->delete($id);
+    }
+
+    public function searchPosts(array $filters): LengthAwarePaginator
+    {
+        return $this->postRepository->search($filters);
     }
 }
