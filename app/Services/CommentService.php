@@ -8,30 +8,30 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CommentService
 {
-    public function __construct(private CommentRepositoryInterface $repo) {}
+    public function __construct(private CommentRepositoryInterface $commentRepository) {}
 
     public function getAll(): Collection
     {
-        return $this->repo->all();
+        return $this->commentRepository->all();
     }
 
     public function getById(int $id): ?Comment
     {
-        return $this->repo->find($id);
+        return $this->commentRepository->find($id);
     }
 
     public function create(array $data): Comment
     {
-        return $this->repo->create($data);
+        return $this->commentRepository->create($data);
     }
 
     public function update(int $id, array $data): bool
     {
-        return $this->repo->update($id, $data);
+        return $this->commentRepository->update($id, $data);
     }
 
     public function delete(int $id): bool
     {
-        return $this->repo->delete($id);
+        return $this->commentRepository->delete($id);
     }
 }
