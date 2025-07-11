@@ -9,6 +9,7 @@ use App\Http\Resources\CommentResource;
 use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -22,7 +23,7 @@ class CommentController extends Controller
     public function store(CommentStoreRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = Auth::id();
 
         $comment = $this->service->create($data);
 
