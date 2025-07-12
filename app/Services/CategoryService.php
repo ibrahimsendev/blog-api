@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Interfaces\CategoryRepositoryInterface;
+use App\Interfaces\Repositories\CategoryRepositoryInterface;
 use App\Interfaces\Services\CategoryServiceInterface;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;

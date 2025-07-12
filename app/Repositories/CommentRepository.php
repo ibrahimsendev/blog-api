@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\CommentRepositoryInterface;
+use App\Interfaces\Repositories\CommentRepositoryInterface;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Collection;
 
