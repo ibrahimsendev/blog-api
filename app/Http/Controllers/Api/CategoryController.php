@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
-use App\Services\CategoryService;
+use App\Interfaces\Services\CategoryServiceInterface;
 use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    public function __construct(private CategoryService $categoryService) {}
+    public function __construct(private CategoryServiceInterface $categoryService) {}
 
     public function index(): JsonResponse
     {

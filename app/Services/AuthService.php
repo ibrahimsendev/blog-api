@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Interfaces\Services\AuthServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthService
+class AuthService implements AuthServiceInterface
 {
     public function register(array $data): User
     {

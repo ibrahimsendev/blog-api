@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Interfaces\CommentRepositoryInterface;
+use App\Interfaces\Services\CommentServiceInterface;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Collection;
 
-class CommentService
+class CommentService implements CommentServiceInterface
 {
     public function __construct(private CommentRepositoryInterface $commentRepository) {}
 

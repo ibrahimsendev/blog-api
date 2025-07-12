@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
-use App\Services\PostService;
+use App\Interfaces\Services\PostServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function __construct(private PostService $postService) {}
+    public function __construct(private PostServiceInterface $postService) {}
 
     public function index(): JsonResponse
     {

@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Interfaces\PostRepositoryInterface;
+use App\Interfaces\Services\PostServiceInterface;
 use App\Models\Post;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-class PostService
+class PostService implements PostServiceInterface
 {
     private PostRepositoryInterface $postRepository;
 

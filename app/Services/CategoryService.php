@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Interfaces\CategoryRepositoryInterface;
+use App\Interfaces\Services\CategoryServiceInterface;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 
-class CategoryService
+class CategoryService implements CategoryServiceInterface
 {
     public function __construct(private CategoryRepositoryInterface $categoryRepository) {}
 

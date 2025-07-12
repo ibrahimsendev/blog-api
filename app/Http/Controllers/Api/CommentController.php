@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentStoreRequest;
 use App\Http\Requests\CommentUpdateRequest;
 use App\Http\Resources\CommentResource;
-use App\Services\CommentService;
+use App\Interfaces\Services\CommentServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function __construct(private CommentService $commentService) {}
+    public function __construct(private CommentServiceInterface $commentService) {}
 
     public function index(): JsonResponse
     {
