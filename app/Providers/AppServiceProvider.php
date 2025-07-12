@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Repositories\AuthRepositoryInterface;
 use App\Interfaces\Repositories\CategoryRepositoryInterface;
 use App\Interfaces\Repositories\CommentRepositoryInterface;
 use App\Interfaces\Repositories\PostRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Interfaces\Services\AuthServiceInterface;
 use App\Interfaces\Services\CategoryServiceInterface;
 use App\Interfaces\Services\CommentServiceInterface;
 use App\Interfaces\Services\PostServiceInterface;
+use App\Repositories\AuthRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CommentRepository;
 use App\Repositories\PostRepository;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostServiceInterface::class, PostService::class);
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
         $this->app->bind(CommentServiceInterface::class, CommentService::class);
+        $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
