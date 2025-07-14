@@ -13,7 +13,7 @@ interface CommentServiceInterface
 
     public function create(array $data): Comment;
 
-    public function update(int $id, array $data): bool;
+    public function update(int $id, array $data): ?Comment;
 
     public function delete(int $id): bool;
 }

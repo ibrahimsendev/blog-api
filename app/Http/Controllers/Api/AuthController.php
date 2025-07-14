@@ -22,7 +22,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => new UserResource($user),
             'token' => $token,
-        ]);
+        ], 201);
     }
 
     public function login(LoginRequest $request): JsonResponse

@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface PostServiceInterface
 {
-    public function getAllPosts(): Collection;
+    public function getAll(): Collection;
 
-    public function getPostById(int $id): ?Post;
+    public function getById(int $id): ?Post;
 
-    public function createPost(array $data): Post;
+    public function create(array $data): Post;
 
-    public function updatePost(int $id, array $data): bool;
+    public function update(int $id, array $data): ?Post;
 
-    public function deletePost(int $id): bool;
+    public function delete(int $id): bool;
 
-    public function searchPosts(array $filters): LengthAwarePaginator;
+    public function search(array $filters): LengthAwarePaginator;
 }

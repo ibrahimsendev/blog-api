@@ -12,32 +12,43 @@ class PostService implements PostServiceInterface
 {
     public function __construct(private PostRepositoryInterface $postRepository) {}
 
-    public function getAllPosts(): Collection
+    public function getAll(): Collection
     {
         return $this->postRepository->all();
     }
 
-    public function getPostById(int $id): ?Post
+    public function getById(int $id): ?Post
     {
         return $this->postRepository->find($id);
     }
 
-    public function createPost(array $data): Post
+    public function create(array $data): Post
     {
         return $this->postRepository->create($data);
     }
 
-    public function updatePost(int $id, array $data): bool
+    public function update(int $id, array $data): ?Post
     {
-        return $this->postRepository->update($id, $data);
+        $post = $this->postRepository->find($id);
+        if (!$post) {
+            return null;
+        }
+
+        $updated = $this->postRepository->update($id, $data);
+
+        if (!$updated) {
+            return null;
+        }
+
+        return $post->fresh();
     }
 
-    public function deletePost(int $id): bool
+    public function delete(int $id): bool
     {
         return $this->postRepository->delete($id);
     }
 
-    public function searchPosts(array $filters): LengthAwarePaginator
+    public function search(array $filters): LengthAwarePaginator
     {
         return $this->postRepository->search($filters);
     }

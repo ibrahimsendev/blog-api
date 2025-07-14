@@ -7,17 +7,20 @@ use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Interfaces\Services\PostServiceInterface;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(private PostServiceInterface $postService) {}
 
     public function index(): JsonResponse
     {
         $filters = request()->only(['search', 'category_id', 'author_id']);
-        $posts = $this->postService->searchPosts($filters);
+        $posts = $this->postService->search($filters);
 
         return response()->json([
             'data' => PostResource::collection($posts),
@@ -31,10 +34,12 @@ class PostController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $post = $this->postService->getPostById($id);
+        $post = $this->postService->getById($id);
+
         if (!$post) {
             return response()->json(['message' => 'Post not found'], 404);
         }
+        
         return response()->json(new PostResource($post));
     }
 
@@ -42,27 +47,41 @@ class PostController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
-        $post = $this->postService->createPost($data);
+
+        $post = $this->postService->create($data);
+
         return response()->json(new PostResource($post), 201);
     }
 
     public function update(PostUpdateRequest $request, int $id): JsonResponse
     {
         $data = $request->validated();
-        $updated = $this->postService->updatePost($id, $data);
-        if (!$updated) {
-            return response()->json(['message' => 'Post not found or not updated'], 404);
+
+        $post = $this->postService->getById($id);
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
         }
-        $post = $this->postService->getPostById($id);
-        return response()->json(new PostResource($post));
+
+        $this->authorize('update', $post);
+
+        $updated = $this->postService->update($id, $data);
+
+        return response()->json(['data' => new PostResource($updated)], 200);
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $deleted = $this->postService->deletePost($id);
-        if (!$deleted) {
-            return response()->json(['message' => 'Post not found or not deleted'], 404);
+        $post = $this->postService->getById($id);
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
         }
+
+        $this->authorize('delete', $post);
+
+        $this->postService->delete($id);
+
         return response()->json(['message' => 'Post deleted successfully']);
     }
 }
