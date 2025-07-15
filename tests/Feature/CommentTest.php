@@ -27,8 +27,10 @@ test('authenticated user can create comment', function () {
 
     $response->assertStatus(201);
     $response->assertJson([
-        'content' => 'This is a test comment',
-        'post_id' => $post->id,
+        'data' => [
+            'content' => 'This is a test comment',
+            'post_id' => $post->id,
+        ]
     ]);
 });
 
@@ -46,7 +48,9 @@ test('authenticated user can update own comment', function () {
 
     $response->assertStatus(200);
     $response->assertJson([
-        'content' => 'Updated comment content',
+        'data' => [
+            'content' => 'Updated comment content',
+        ]
     ]);
 });
 

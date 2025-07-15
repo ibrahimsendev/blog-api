@@ -7,13 +7,14 @@ use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Interfaces\Services\PostServiceInterface;
+use App\Traits\ApiResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, ApiResponse;
 
     public function __construct(private PostServiceInterface $postService) {}
 
@@ -22,25 +23,29 @@ class PostController extends Controller
         $filters = request()->only(['search', 'category_id', 'author_id']);
         $posts = $this->postService->search($filters);
 
-        return response()->json([
-            'data' => PostResource::collection($posts),
-            'meta' => [
-                'current_page' => $posts->currentPage(),
-                'last_page' => $posts->lastPage(),
-                'total' => $posts->total(),
+        return $this->successResponse(
+            [
+                'posts' => PostResource::collection($posts),
+                'meta' => [
+                    'current_page' => $posts->currentPage(),
+                    'last_page' => $posts->lastPage(),
+                    'total' => $posts->total(),
+                ],
             ],
-        ]);
+            'Posts retrieved successfully.'
+        );
     }
 
     public function show(int $id): JsonResponse
     {
         $post = $this->postService->getById($id);
 
-        if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
-        }
-        
-        return response()->json(new PostResource($post));
+        return $post
+            ? $this->successResponse(
+                new PostResource($post),
+                'Post retrieved successfully.'
+            )
+            : $this->errorResponse('Post not found.', 404);
     }
 
     public function store(PostStoreRequest $request): JsonResponse
@@ -50,7 +55,11 @@ class PostController extends Controller
 
         $post = $this->postService->create($data);
 
-        return response()->json(new PostResource($post), 201);
+        return $this->successResponse(
+            new PostResource($post),
+            'Post created successfully.',
+            201
+        );
     }
 
     public function update(PostUpdateRequest $request, int $id): JsonResponse
@@ -60,14 +69,17 @@ class PostController extends Controller
         $post = $this->postService->getById($id);
 
         if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
+            return $this->errorResponse('Post not found.', 404);
         }
 
         $this->authorize('update', $post);
 
         $updated = $this->postService->update($id, $data);
 
-        return response()->json(['data' => new PostResource($updated)], 200);
+        return $this->successResponse(
+            new PostResource($updated),
+            'Post updated successfully.'
+        );
     }
 
     public function destroy(int $id): JsonResponse
@@ -75,13 +87,13 @@ class PostController extends Controller
         $post = $this->postService->getById($id);
 
         if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
+            return $this->errorResponse('Post not found', 404);
         }
 
         $this->authorize('delete', $post);
 
         $this->postService->delete($id);
 
-        return response()->json(['message' => 'Post deleted successfully']);
+        return $this->successResponse(null, 'Post deleted successfully.');
     }
 }

@@ -32,11 +32,13 @@ test('user can login with correct credentials', function () {
 
     $response->assertStatus(200);
     $response->assertJsonStructure([
-        'token',
-        'user' => [
-            'id',
-            'name',
-            'email',
+        'data' => [
+            'user' => [
+                'id',
+                'name',
+                'email',
+            ],
+            'token'
         ]
     ]);
 });
@@ -62,6 +64,6 @@ test('authenticated user can logout', function () {
     $response->assertStatus(200);
 
     $response->assertJson([
-        'message' => 'Logged out',
+        'message' => 'User logged out successfully.',
     ]);
 });

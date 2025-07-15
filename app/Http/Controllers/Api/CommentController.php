@@ -7,19 +7,25 @@ use App\Http\Requests\CommentStoreRequest;
 use App\Http\Requests\CommentUpdateRequest;
 use App\Http\Resources\CommentResource;
 use App\Interfaces\Services\CommentServiceInterface;
+use App\Traits\ApiResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, ApiResponse;
 
     public function __construct(private CommentServiceInterface $commentService) {}
 
     public function index(): JsonResponse
     {
-        return response()->json(CommentResource::collection($this->commentService->getAll()));
+        $comments = $this->commentService->getAll();
+
+        return $this->successResponse(
+            CommentResource::collection($comments),
+            'Comments retrieved successfully.'
+        );
     }
 
     public function store(CommentStoreRequest $request): JsonResponse
@@ -29,7 +35,11 @@ class CommentController extends Controller
 
         $comment = $this->commentService->create($data);
 
-        return response()->json(new CommentResource($comment), 201);
+        return $this->successResponse(
+            new CommentResource($comment),
+            'Comment created successfully.',
+            201
+        );
     }
 
     public function update(CommentUpdateRequest $request, int $id): JsonResponse
@@ -37,14 +47,17 @@ class CommentController extends Controller
         $comment = $this->commentService->getById($id);
 
         if (!$comment) {
-            return response()->json(['message' => 'Comment not found'], 404);
+            return $this->errorResponse('Comment not found.', 404);
         }
 
         $this->authorize('update', $comment);
 
         $updated = $this->commentService->update($id, $request->validated());
 
-        return response()->json(new CommentResource($updated));
+        return $this->successResponse(
+            new CommentResource($updated),
+            'Comment updated successfully.'
+        );
     }
 
     public function destroy(int $id): JsonResponse
@@ -52,13 +65,13 @@ class CommentController extends Controller
         $comment = $this->commentService->getById($id);
 
         if (!$comment) {
-            return response()->json(['message' => 'Comment not found'], 404);
+            return $this->errorResponse('Comment not found.', 404);
         }
 
         $this->authorize('delete', $comment);
 
         $this->commentService->delete($id);
 
-        return response()->json(['message' => 'Comment deleted successfully']);
+        return $this->successResponse(null, 'Comment deleted successfully.');
     }
 }
