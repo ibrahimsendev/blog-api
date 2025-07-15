@@ -37,7 +37,7 @@ class AuthController extends Controller
         $user = $this->authService->login($request->email, $request->password);
 
         if (!$user) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return $this->errorResponse('Invalid credentials', 401);
         }
 
         $token = $user->createToken('api_token')->plainTextToken;
