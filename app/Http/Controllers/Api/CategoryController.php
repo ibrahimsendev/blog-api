@@ -7,12 +7,14 @@ use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
 use App\Interfaces\Services\CategoryServiceInterface;
+use App\Models\Category;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    use ApiResponse;
+    use AuthorizesRequests, ApiResponse;
 
     public function __construct(private CategoryServiceInterface $categoryService) {}
 
