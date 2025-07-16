@@ -1,61 +1,122 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Blog API
 
-## About Laravel
+This project is a **Blog API** built with Laravel 12. It provides RESTful endpoints for managing posts, categories, and comments using repositories, services, interfaces, requests, and resources to follow clean architecture principles.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* User authentication via Laravel Sanctum.
+* CRUD operations for:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+  * Posts
+  * Categories
+  * Comments
+* Role-based authorization using policies.
+* Standardized API response structure (success & error).
+* Pagination support for listings.
+* Rate limiting protection.
+* Centralized exception handling.
+* Feature tests included.
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clone the repository:**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone https://github.com/ibrahimsendev/blog-api.git
+cd blog-api
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Install dependencies:**
 
-## Laravel Sponsors
+```bash
+composer install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Set up environment file:**
 
-### Premium Partners
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Configure your database in the `.env` file and run migrations:**
 
-## Contributing
+```bash
+php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. **Run the application:**
 
-## Code of Conduct
+```bash
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## API Endpoints
 
-## Security Vulnerabilities
+| Method | Endpoint             | Description                |
+| ------ | -------------------- | -------------------------- |
+| POST   | `/api/auth/register`   | Register a new user        |
+| POST   | `/api/auth/login`      | Login and get API token    |
+| POST   | `/api/auth/logout`     | Logout authenticated user  |
+| GET    | `/api/posts`           | List all posts (paginated) |
+| GET    | `/api/posts/{id}`      | Show single post           |
+| POST   | `/api/posts`           | Create new post            |
+| PUT    | `/api/posts/{id}`      | Update existing post       |
+| DELETE | `/api/posts/{id}`      | Delete post                |
+| GET    | `/api/categories`      | List all categories        |
+| GET    | `/api/categories/{id}` | Show category details      |
+| POST   | `/api/categories`      | Create new category        |
+| PUT    | `/api/categories/{id}` | Update category            |
+| DELETE | `/api/categories/{id}` | Delete category            |
+| GET    | `/api/comments`        | List all comments          |
+| POST   | `/api/comments`        | Create comment             |
+| PUT    | `/api/comments/{id}`   | Update comment             |
+| DELETE | `/api/comments/{id}`   | Delete comment             |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**🔗 [Blog API - Laravel 12 Postman Collection](https://www.postman.com/technical-specialist-83839034/blog-api/collection/vzvtwgm/blog-api-laravel-12?action=share&creator=40401228)**
+
+## Request Validation Rules
+
+* **Posts:**
+
+  * `title`: Required, string, max 255 characters.
+  * `content`: Required.
+  * `category_id`: Must exist in categories.
+
+* **Categories:**
+
+  * `name`: Required, string, max 255 characters.
+
+* **Comments:**
+
+  * `content`: Required.
+  * `post_id`: Must exist in posts.
+
+* **Authentication:**
+
+  * `email`: Required, valid email, unique.
+  * `password`: Required, min 8 characters.
+
+## Technologies Used
+
+* Laravel 12 (Framework)
+* Laravel Sanctum (API Authentication)
+* PHP 8.2+ (Programming Language)
+* MySQL (Database)
+* PHPUnit (Testing)
+* Postman (API Testing)
+
+## Additional Notes
+
+* Follows clean architecture: Services, Repositories, Interfaces, Resources, Requests.
+* Global error handling and response standardization using custom ApiResponse trait.
+* Rate limiting applied via middleware.
+* Feature tests ensure stability.
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-source and available under the [MIT license](https://opensource.org/licenses/MIT).
