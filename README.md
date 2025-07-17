@@ -75,7 +75,7 @@ php artisan serve
 | PUT    | `/api/comments/{id}`   | Update comment             |
 | DELETE | `/api/comments/{id}`   | Delete comment             |
 
-**🔗 [Blog API - Laravel 12 Postman Collection](https://www.postman.com/technical-specialist-83839034/blog-api/collection/vzvtwgm/blog-api-laravel-12?action=share&creator=40401228)**
+**🔗 [Blog API - Postman Collection](https://www.postman.com/technical-specialist-83839034/blog-api/collection/vzvtwgm/blog-api-laravel-12?action=share&creator=40401228)**
 
 ## Request Validation Rules
 
